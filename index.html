@@ -1,0 +1,493 @@
+<style>
+/* ═══════════════════════════════
+   1. RESET & BASE VARIABLES
+═══════════════════════════════ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans, sans-serif); background: #f0f2f0; }
+
+:root {
+  --bg: #F5F9F5;
+  --f1: #E8F5EC;
+  --p1: #A8D5B2;
+  --p2: #4A9E6A;
+  --p3: #1D6040;
+  --e1: #8B5E3C;
+  --e2: #D4B896;
+}
+
+/* ═══════════════════════════════
+   2. MAIN LAYOUT & SHARED UI
+═══════════════════════════════ */
+.wrap { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; padding: 2rem; }
+.phone {
+    width: 310px; height: 620px; border-radius: 38px; border: 8px solid #1D6040;
+    background: var(--bg); overflow: hidden; flex-shrink: 0; display: flex;
+    flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.1); position: relative;
+}
+.sbar { background: var(--p3); padding: 12px 20px 8px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+.sbar-t { color: var(--f1); font-size: 11px; font-weight: 600; }
+.scroll-body { overflow-y: auto; flex: 1; padding-bottom: 20px; }
+.scroll-body::-webkit-scrollbar { display: none; }
+
+.btn-p { background: var(--p3); color: #fff; padding: 12px; border-radius: 12px; text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; border: none; width: 100%; }
+.inp-g { margin-bottom: 12px; }
+.inp-g label { display: block; font-size: 10px; color: var(--p2); margin-bottom: 4px; font-weight: 600; }
+.inp-g input, .inp-g select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--p1); font-size: 12px; outline: none; }
+.sec-t { font-size: 12px; font-weight: 700; color: var(--p3); margin: 16px 16px 10px; display: flex; justify-content: space-between; }
+
+/* Bottom Navigation */
+.bnav { background: #fff; border-top: 1px solid var(--p1); display: flex; justify-content: space-around; padding: 12px 0 15px; flex-shrink: 0; }
+.bni { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+.bni svg { stroke: var(--p1); }
+.bni.active svg { stroke: var(--p3); fill: var(--f1); }
+.bnl { font-size: 9px; color: var(--p1); font-weight: 600; }
+.bni.active .bnl { color: var(--p3); }
+
+/* ═══════════════════════════════
+   3. SCREEN SPECIFIC STYLES
+═══════════════════════════════ */
+/* Beranda */
+.h-top { background: var(--p3); padding: 15px 18px 25px; }
+.h-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.h-title { color: #fff; font-size: 18px; font-weight: 600; }
+.h-acc { width: 36px; height: 36px; background: var(--p2); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--p1); }
+.h-search { background: rgba(255,255,255,0.15); border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
+.h-search span { color: var(--p1); font-size: 12px; }
+.m-near { display: flex; gap: 12px; padding: 0 16px; overflow-x: auto; }
+.m-card { width: 140px; flex-shrink: 0; background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid var(--p1); }
+.m-img { height: 80px; background: var(--e2); position: relative; }
+.m-info { padding: 8px; }
+.m-name { font-size: 11px; font-weight: 600; color: var(--p3); }
+.m-dist { font-size: 9px; color: var(--p2); }
+.post-sec { margin: 0 16px; background: var(--f1); border-radius: 15px; padding: 12px; border: 1px dashed var(--p2); }
+.post-item { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+.post-icon { width: 30px; height: 30px; background: var(--p2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.post-txt { font-size: 10.5px; color: var(--p3); line-height: 1.4; }
+
+/* Detail Gunung */
+.g-img-lg { height: 180px; background: var(--p3); position: relative; }
+.g-badge { position: absolute; bottom: 12px; left: 16px; background: rgba(0,0,0,0.5); color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 10px; }
+.g-body { padding: 16px; }
+.g-price { display: flex; gap: 10px; margin: 12px 0; }
+.p-tag { flex: 1; background: var(--f1); padding: 8px; border-radius: 8px; text-align: center; border: 1px solid var(--p1); }
+.p-label { font-size: 8px; color: var(--p2); text-transform: uppercase; }
+.p-val { font-size: 12px; font-weight: 700; color: var(--p3); }
+.g-desc { font-size: 11px; color: #555; line-height: 1.5; margin-bottom: 15px; }
+.g-map { height: 120px; background: #D4EAD8; border-radius: 12px; margin: 10px 0; display: flex; align-items: center; justify-content: center; color: var(--p3); font-size: 11px; font-weight: 600; border: 1px solid var(--p1); }
+
+/* Form (Login/Reg/Order) */
+.form-box { padding: 20px; }
+.f-title { font-size: 18px; font-weight: 700; color: var(--p3); margin-bottom: 5px; }
+.f-sub { font-size: 11px; color: var(--p2); margin-bottom: 20px; }
+.upload-box { border: 1px dashed var(--p1); padding: 15px; text-align: center; border-radius: 8px; font-size: 10px; color: var(--p2); background: var(--f1); margin-bottom: 12px; }
+.order-summary { background: var(--p3); color: white; padding: 15px; border-radius: 12px; margin: 16px; }
+.order-row { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px; }
+.auto-fill-badge { background: var(--p2); color: white; font-size: 8px; padding: 2px 6px; border-radius: 4px; margin-left: 5px; }
+
+/* Panduan */
+.guide-header { height: 150px; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80'); background-size: cover; display: flex; align-items: flex-end; padding: 15px; color: white; }
+.content-body { padding: 16px; font-size: 12px; line-height: 1.6; color: #333; }
+.step-card { display: flex; gap: 12px; margin-bottom: 15px; padding: 10px; background: white; border-radius: 10px; border-left: 4px solid var(--p2); }
+
+/* E-Tiket */
+.ticket-box { margin: 20px; background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+.ticket-top { background: var(--p3); padding: 20px; text-align: center; color: white; }
+.qr-placeholder { width: 120px; height: 120px; background: #eee; margin: 15px auto; display: flex; align-items: center; justify-content: center; border: 4px solid white; }
+
+/* Profil */
+.prof-head { background: var(--p3); padding: 30px 20px 40px; text-align: center; color: white; border-radius: 0 0 25px 25px; }
+.prof-av { width: 70px; height: 70px; border-radius: 50%; background: var(--p2); margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; border: 3px solid var(--p1); }
+.prof-stats { display: flex; justify-content: center; gap: 20px; margin-top: 15px; }
+.p-stat-item { text-align: center; }
+.p-stat-val { font-size: 16px; font-weight: 700; color: var(--p1); }
+.p-stat-lbl { font-size: 9px; opacity: 0.8; }
+.menu-list { padding: 20px 16px; }
+.m-item { display: flex; align-items: center; gap: 12px; padding: 14px; background: white; margin-bottom: 10px; border-radius: 12px; border: 1px solid var(--p1); }
+.m-ic { width: 32px; height: 32px; background: var(--f1); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+
+/* Riwayat Tiket */
+.tabs { display: flex; gap: 10px; padding: 16px; }
+.tab { flex: 1; text-align: center; padding: 10px; font-size: 11px; font-weight: 600; border-radius: 20px; background: white; border: 1px solid var(--p1); color: var(--p2); }
+.tab.active { background: var(--p3); color: white; border-color: var(--p3); }
+.history-card { background: white; margin: 0 16px 12px; border-radius: 12px; padding: 14px; border: 1px solid var(--p1); position: relative; }
+.status-badge { position: absolute; top: 14px; right: 14px; font-size: 9px; padding: 4px 8px; border-radius: 12px; font-weight: 700; }
+.status-aktif { background: #E3F2FD; color: #1565C0; }
+.status-selesai { background: var(--f1); color: var(--p3); }
+
+/* GPS & SOS */
+.map-container { height: 250px; background: #D4EAD8; position: relative; border-bottom: 2px solid var(--p1); }
+.live-badge { position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.9); padding: 5px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; color: #D32F2F; display: flex; align-items: center; gap: 5px; }
+.live-dot { width: 6px; height: 6px; background: #D32F2F; border-radius: 50%; }
+.track-stats { display: flex; justify-content: space-around; padding: 20px 16px; background: white; margin: -20px 16px 16px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); position: relative; z-index: 10; }
+.t-stat { text-align: center; }
+.t-val { font-size: 18px; font-weight: 700; color: var(--p3); }
+.t-lbl { font-size: 9px; color: var(--p2); font-weight: 600; margin-top: 2px; }
+.sos-btn { background: #D32F2F; color: white; padding: 15px; border-radius: 12px; text-align: center; font-weight: 700; font-size: 14px; margin: 0 16px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3); }
+</style>
+
+<div class="wrap">
+
+<!-- ==========================================
+     SCREEN 1: BERANDA
+=========================================== -->
+<div class="phone">
+  <div class="sbar"><span class="sbar-t">09:41</span></div>
+  <div class="scroll-body">
+    <div class="h-top">
+      <div class="h-head">
+        <div class="h-title">MuncakYuk</div>
+        <div class="h-acc"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
+      </div>
+      <div class="h-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" stroke="#A8D5B2" stroke-width="2" fill="none"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <span>Cari gunung tujuanmu...</span>
+      </div>
+    </div>
+    
+    <div class="sec-t">Gunung di Sekitarmu 📍</div>
+    <div class="m-near">
+      <div class="m-card">
+        <div class="m-img" style="background:#4A9E6A"></div>
+        <div class="m-info"><div class="m-name">Gunung Prau</div><div class="m-dist">25km dari lokasimu</div></div>
+      </div>
+      <div class="m-card">
+        <div class="m-img" style="background:#8B5E3C"></div>
+        <div class="m-info"><div class="m-name">Gunung Merbabu</div><div class="m-dist">42km dari lokasimu</div></div>
+      </div>
+    </div>
+
+    <div class="sec-t">Info & Panduan Pendaki ⛺</div>
+    <div class="post-sec">
+      <div class="post-item">
+        <div class="post-icon">🎒</div>
+        <div class="post-txt"><b>Panduan Awam:</b> Perlengkapan wajib untuk pendakian pertama kali.</div>
+      </div>
+      <div class="post-item">
+        <div class="post-icon">🌦️</div>
+        <div class="post-txt"><b>Info Cuaca:</b> Waspada cuaca ekstrem di jalur Jawa Tengah minggu ini.</div>
+      </div>
+    </div>
+  </div>
+  <!-- Bottom Nav -->
+  <div class="bnav">
+    <div class="bni active"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="bnl">Beranda</span></div>
+    <div class="bni"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="bnl">Tiket</span></div>
+    <div class="bni"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="bnl">Profil</span></div>
+  </div>
+</div>
+
+<!-- ==========================================
+     SCREEN 2: DETAIL GUNUNG
+=========================================== -->
+<div class="phone">
+  <div class="sbar"><span class="sbar-t">09:42</span></div>
+  <div class="scroll-body">
+    <div class="g-img-lg">
+       <div style="padding:15px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></div>
+       <div class="g-badge">3.726 MDPL</div>
+    </div>
+    <div class="g-body">
+      <div class="h-title" style="color:var(--p3); margin-bottom:5px;">Gunung Rinjani</div>
+      <div class="g-desc">Gunung berapi kedua tertinggi di Indonesia yang menawarkan pemandangan Danau Segara Anak yang memukau.</div>
+      
+      <div class="g-price">
+        <div class="p-tag"><div class="p-label">Weekday</div><div class="p-val">Rp 15.000</div></div>
+        <div class="p-tag"><div class="p-label">Weekend</div><div class="p-val">Rp 25.000</div></div>
+      </div>
+
+      <div class="inp-g">
+        <label>Opsi Jalur Pendakian</label>
+        <select><option>Via Sembalun (Populer)</option><option>Via Senaru</option><option>Via Torean (Eksotis)</option></select>
+      </div>
+
+      <div class="sec-t" style="margin:10px 0 5px 0">Lokasi & Maps</div>
+      <div class="g-map">LIHAT GOOGLE MAPS</div>
+
+      <div class="sec-t" style="margin:20px 0 10px 0">Rekomendasi Lain</div>
+      <div class="m-near" style="padding:0">
+        <div class="m-card" style="width:110px;"><div class="m-img" style="height:60px;"></div><div class="m-info" style="font-size:9px;">Gn. Semeru</div></div>
+        <div class="m-card" style="width:110px;"><div class="m-img" style="height:60px; background:var(--p1)"></div><div class="m-info" style="font-size:9px;">Gn. Lawu</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:15px; background:#fff;"><button class="btn-p">Pesan Tiket Sekarang</button></div>
+</div>
+
+<!-- ==========================================
+     SCREEN 3: REGISTRASI AKUN
+=========================================== -->
+<div class="phone">
+  <div class="sbar"><span class="sbar-t">09:43</span></div>
+  <div class="scroll-body">
+    <div class="form-box">
+      <div class="f-title">Buat Akun</div>
+      <div class="f-sub">Lengkapi data untuk mulai mendaki.</div>
+      
+      <div class="inp-g"><label>Nama Lengkap</label><input type="text" placeholder="Raka Wibowo"></div>
+      <div class="inp-g"><label>No. Handphone</label><input type="tel" placeholder="0812xxxx"></div>
+      <div class="inp-g"><label>Email</label><input type="email" placeholder="raka@student.udinus.ac.id"></div>
+      
+      <label style="font-size:10px; color:var(--p2); font-weight:600;">Identitas (KTP/SIM/Passport)</label>
+      <div class="upload-box">📷 Klik untuk upload foto identitas</div>
+      
+      <div class="inp-g"><label>Kontak Emergency</label><input type="text" placeholder="Nama & No. HP Keluarga"></div>
+      <div class="inp-g"><label>Password</label><input type="password" placeholder="••••••••"></div>
+      <div class="inp-g"><label>Konfirmasi Password</label><input type="password" placeholder="••••••••"></div>
+      
+      <div style="display:flex; gap:8px; align-items:center; margin:15px 0;">
+        <input type="checkbox" id="setuju">
+        <label for="setuju" style="font-size:9px; color:#555;">Saya setuju dengan peraturan pendakian</label>
+      </div>
+
+      <button class="btn-p">Daftar Sekarang</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================
+     SCREEN 4: LOGIN
+=========================================== -->
+<div class="phone" style="justify-content:center;">
+  <div class="form-box">
+    <div style="text-align:center; margin-bottom:30px;">
+      <div style="font-size:40px;">⛰️</div>
+      <div class="f-title">MuncakYuk</div>
+      <div class="f-sub">Silahkan masuk ke akun anda</div>
+    </div>
+
+    <div class="inp-g"><label>Email</label><input type="email" placeholder="alamat@email.com"></div>
+    <div class="inp-g"><label>Password</label><input type="password" placeholder="••••••••"></div>
+    
+    <div style="text-align:right; margin-bottom:20px;"><a href="#" style="font-size:10px; color:var(--p2); text-decoration:none;">Lupa Password?</a></div>
+    
+    <button class="btn-p">Masuk</button>
+    <div style="text-align:center; margin-top:20px; font-size:11px; color:#555;">
+      Belum punya akun? <span style="color:var(--p3); font-weight:700;">Daftar</span>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================
+     SCREEN 5: TAMPILAN PEMESANAN
+=========================================== -->
+<div class="phone">
+  <div class="sbar"><span class="sbar-t">10:20</span></div>
+  <div class="scroll-body">
+    <div style="padding: 15px; display: flex; align-items: center; gap: 10px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--p3)" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        <span style="font-weight: 700; color: var(--p3);">Form Pemesanan</span>
+    </div>
+
+    <div class="order-summary">
+        <div style="font-size: 14px; font-weight: 600; margin-bottom: 10px;">Gunung Rinjani</div>
+        <div class="order-row"><span>Jadwal:</span> <span>12 Mei 2026</span></div>
+        <div class="order-row"><span>Jalur:</span> <span>Sembalun</span></div>
+    </div>
+
+    <div class="form-box" style="padding-top: 0;">
+        <div style="font-size: 10px; color: var(--e1); margin-bottom: 15px; font-style: italic;">*Data otomatis diisi dari profil Anda.</div>
+        
+        <div class="inp-g">
+            <label>Nama Lengkap <span class="auto-fill-badge">Auto</span></label>
+            <input type="text" value="Raka Wibowo" readonly style="background: var(--f1);">
+        </div>
+        
+        <div class="inp-g">
+            <label>Email <span class="auto-fill-badge">Auto</span></label>
+            <input type="email" value="raka@student.udinus.ac.id" readonly style="background: var(--f1);">
+        </div>
+
+        <label style="font-size:10px; color:var(--p2); font-weight:600;">Verifikasi Identitas</label>
+        <div class="upload-box" style="border-style: solid; background: white;">
+            ✅ KTP_Raka_Wibowo.jpg (Terverifikasi)
+        </div>
+
+        <div class="inp-g">
+            <label>Kontak Darurat (Emergency)</label>
+            <input type="text" value="Bpk. Wibowo - 081299887766">
+        </div>
+
+        <div style="background: #FFF9C4; padding: 10px; border-radius: 8px; font-size: 9px; color: #827717; margin-bottom: 15px;">
+            Pastikan data sudah benar sebelum melakukan pembayaran.
+        </div>
+
+        <button class="btn-p">Bayar Sekarang — Rp 25.000</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================
+     SCREEN 6: DETAIL PANDUAN
+=========================================== -->
+<div class="phone">
+  <div class="sbar"><span class="sbar-t">10:25</span></div>
+  <div class="scroll-body">
+    <div class="guide-header">
+        <div>
+            <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px;">Panduan Pendaki</div>
+            <div style="font-size: 18px; font-weight: 700;">Tips Menghindari Hipotermia</div>
+        </div>
+    </div>
+    
+    <div class="content-body">
+        <p>Mendaki gunung bukan hanya soal fisik, tapi juga tentang keselamatan.</p>
+        
+        <div class="sec-t" style="margin-left: 0;">Langkah Pencegahan:</div>
+        
+        <div class="step-card">
+            <div style="font-size: 20px;">01</div>
+            <div>
+                <div style="font-weight: 600; color: var(--p3);">Gunakan Layering System</div>
+                <div style="font-size: 10px; color: #666;">Pakailah pakaian berbahan sintetis atau wol.</div>
+            </div>
+        </div>
+
+        <div class="step-card">
+            <div style="font-size: 20px;">02</div>
+            <div>
+                <div style="font-weight: 600; color: var(--p3);">Ganti Baju Segera</div>
+                <div style="font-size: 10px; color: #666;">Setelah sampai di camp site, segera ganti baju basah.</div>
+            </div>
+        </div>
+    </div>
+  </div>
+  <div class="bnav">
+    <div class="bni" style="flex:1"><span style="font-size: 11px; font-weight: 600; color: var(--p3);">Bermanfaat? 👍</span></div>
+    <div class="bni" style="flex:1"><span style="font-size: 11px; font-weight: 600; color: #666;">Simpan Panduan 🔖</span></div>
+  </div>
+</div>
+
+<!-- ==========================================
+     SCREEN 7: E-TIKET
+=========================================== -->
+<div class="phone">
+  <div class="sbar"><span class="sbar-t">10:30</span></div>
+  <div class="scroll-body">
+    <div style="text-align: center; padding: 20px;">
+        <div style="font-size: 30px;">✅</div>
+        <div class="f-title">Pembayaran Berhasil!</div>
+        <div class="f-sub">Tiket pendakian Anda sudah aktif.</div>
+    </div>
+
+    <div class="ticket-box">
+        <div class="ticket-top">
+            <div style="font-size: 10px; opacity: 0.8;">E-TIKET PENDAKIAN</div>
+            <div style="font-size: 16px; font-weight: 700; margin-top: 5px;">GUNUNG RINJANI</div>
+        </div>
+        <div style="padding: 20px; border-bottom: 1px dashed #ddd;">
+            <div class="order-row"><span style="color:#888">Pendaki:</span> <span style="font-weight:600">Raka Wibowo</span></div>
+            <div class="order-row"><span style="color:#888">Tanggal:</span> <span style="font-weight:600">12 Mei 2026</span></div>
+            <div class="order-row"><span style="color:#888">Kode:</span> <span style="font-weight:600">MY-RINJ-9921</span></div>
+            
+            <div class="qr-placeholder">
+                <div style="text-align: center;">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h2v2H7zm8 0h2v2h-2zm0 8h2v2h-2zm-8 0h2v2H7zm4-4h2v2h-2z"/></svg>
+                    <div style="font-size: 8px; color: #999; margin-top: 5px;">SCAN GATE</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="padding: 0 20px;">
+        <button class="btn-p">Kembali ke Beranda</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================
+     SCREEN 8: PROFIL PENGGUNA
+=========================================== -->
+<div class="phone">
+  <div class="sbar" style="background:var(--p3)"><span class="sbar-t">10:45</span></div>
+  <div class="scroll-body" style="padding-bottom:0;">
+    <div class="prof-head">
+        <div class="prof-av">RW</div>
+        <div style="font-size: 18px; font-weight: 700; margin-bottom: 2px;">Raka Wibowo</div>
+        <div style="font-size: 11px; color: var(--p1);">Kendal, Jawa Tengah</div>
+        
+        <div class="prof-stats">
+            <div class="p-stat-item"><div class="p-stat-val">4</div><div class="p-stat-lbl">Puncak</div></div>
+            <div class="p-stat-item"><div class="p-stat-val">12k</div><div class="p-stat-lbl">MDPL</div></div>
+            <div class="p-stat-item"><div class="p-stat-val">Lv.2</div><div class="p-stat-lbl">Explorer</div></div>
+        </div>
+    </div>
+
+    <div class="menu-list">
+        <div class="sec-t" style="margin: 0 0 10px 0;">Pengaturan Akun</div>
+        <div class="m-item">
+            <div class="m-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--p3)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div style="flex:1"><div style="font-size:12px; font-weight:600; color:var(--p3)">Edit Profil</div></div>
+        </div>
+        <div class="m-item" style="border-color: #ffcdd2; background: #fff5f5; margin-top: 20px;">
+            <div class="m-ic" style="background: #ffebee;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D32F2F" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>
+            <div style="flex:1"><div style="font-size:12px; font-weight:600; color:#D32F2F">Keluar (Logout)</div></div>
+        </div>
+    </div>
+  </div>
+  <div class="bnav">
+    <div class="bni"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="bnl">Beranda</span></div>
+    <div class="bni"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="bnl">Tiket</span></div>
+    <div class="bni active"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="bnl">Profil</span></div>
+  </div>
+</div>
+
+<!-- ==========================================
+     SCREEN 9: RIWAYAT TIKET
+=========================================== -->
+<div class="phone">
+  <div class="sbar"><span class="sbar-t">10:46</span></div>
+  <div class="scroll-body" style="padding-bottom:0;">
+    <div class="sec-t" style="font-size: 18px; margin-top: 20px;">Tiket Pendakian</div>
+    
+    <div class="tabs">
+        <div class="tab active">Akan Datang</div>
+        <div class="tab">Selesai</div>
+    </div>
+
+    <div class="history-card">
+        <div class="status-badge status-aktif">Menunggu Hari-H</div>
+        <div style="font-size: 14px; font-weight: 700; color: var(--p3); margin-bottom: 4px;">Gunung Rinjani</div>
+        <div style="font-size: 10px; color: var(--p2); margin-bottom: 12px;">Via Sembalun • 3.726 MDPL</div>
+        <button class="btn-p" style="padding: 8px; font-size: 11px; background: white; color: var(--p3); border: 1px solid var(--p3);">Lihat E-Tiket</button>
+    </div>
+  </div>
+  <div class="bnav">
+    <div class="bni"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="bnl">Beranda</span></div>
+    <div class="bni active"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="bnl">Tiket</span></div>
+    <div class="bni"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="bnl">Profil</span></div>
+  </div>
+</div>
+
+<!-- ==========================================
+     SCREEN 10: NAVIGASI GPS & SOS
+=========================================== -->
+<div class="phone">
+  <div class="sbar"><span class="sbar-t">10:50</span></div>
+  <div class="scroll-body" style="padding-bottom:0;">
+    <div class="map-container">
+        <div class="live-badge"><div class="live-dot"></div> GPS Aktif</div>
+        <svg width="100%" height="250" viewBox="0 0 310 250" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 200 Q 100 150 150 120 T 250 50" stroke="#4A9E6A" stroke-width="4" stroke-dasharray="8,4" fill="none"/>
+            <circle cx="50" cy="200" r="6" fill="#8B5E3C"/>
+            <circle cx="180" cy="100" r="8" fill="#1D6040" stroke="white" stroke-width="2"/>
+        </svg>
+    </div>
+
+    <div class="track-stats">
+        <div class="t-stat"><div class="t-val">2.105</div><div class="t-lbl">MDPL Saat Ini</div></div>
+        <div class="t-stat"><div class="t-val" style="color: var(--e1);">2.5km</div><div class="t-lbl">Sisa ke Puncak</div></div>
+    </div>
+
+    <div class="sos-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        KIRIM SINYAL SOS
+    </div>
+  </div>
+  <div class="bnav">
+    <div class="bni"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="bnl">Beranda</span></div>
+    <div class="bni active"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D32F2F" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg><span class="bnl" style="color:#D32F2F">Navigasi</span></div>
+    <div class="bni"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="bnl">Profil</span></div>
+  </div>
+</div>
+
+</div>
